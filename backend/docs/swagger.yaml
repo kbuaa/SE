@@ -1,0 +1,726 @@
+basePath: /api/v1
+definitions:
+  controllers.Prescription:
+    properties:
+      added:
+        type: string
+      doctor:
+        type: integer
+      drug:
+        type: integer
+      note:
+        type: string
+      nurse:
+        type: integer
+      patient:
+        type: integer
+    type: object
+  ent.Doctor:
+    properties:
+      Doctor_Email:
+        description: DoctorEmail holds the value of the "Doctor_Email" field.
+        type: string
+      Doctor_Name:
+        description: DoctorName holds the value of the "Doctor_Name" field.
+        type: string
+      Doctor_Tel:
+        description: DoctorTel holds the value of the "Doctor_Tel" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.DoctorEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the DoctorQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.DoctorEdges:
+    properties:
+      doctorPrescription:
+        description: DoctorPrescription holds the value of the doctor_prescription
+          edge.
+        items:
+          $ref: '#/definitions/ent.Prescription'
+        type: array
+    type: object
+  ent.Drug:
+    properties:
+      Drug_Name:
+        description: DrugName holds the value of the "Drug_Name" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.DrugEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the DrugQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.DrugEdges:
+    properties:
+      drugPrescription:
+        description: DrugPrescription holds the value of the drug_prescription edge.
+        items:
+          $ref: '#/definitions/ent.Prescription'
+        type: array
+    type: object
+  ent.Nurse:
+    properties:
+      Nurse_Email:
+        description: NurseEmail holds the value of the "Nurse_Email" field.
+        type: string
+      Nurse_Name:
+        description: NurseName holds the value of the "Nurse_Name" field.
+        type: string
+      Nurse_Password:
+        description: NursePassword holds the value of the "Nurse_Password" field.
+        type: string
+      Nurse_Tel:
+        description: NurseTel holds the value of the "Nurse_Tel" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.NurseEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the NurseQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.NurseEdges:
+    properties:
+      nursePrescription:
+        description: NursePrescription holds the value of the nurse_prescription edge.
+        items:
+          $ref: '#/definitions/ent.Prescription'
+        type: array
+    type: object
+  ent.Patient:
+    properties:
+      Patient_Name:
+        description: PatientName holds the value of the "Patient_Name" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.PatientEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the PatientQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.PatientEdges:
+    properties:
+      patientPrescription:
+        description: PatientPrescription holds the value of the patient_prescription
+          edge.
+        items:
+          $ref: '#/definitions/ent.Prescription'
+        type: array
+    type: object
+  ent.Prescription:
+    properties:
+      Prescrip_DateTime:
+        description: PrescripDateTime holds the value of the "Prescrip_DateTime" field.
+        type: string
+      Prescrip_Note:
+        description: PrescripNote holds the value of the "Prescrip_Note" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.PrescriptionEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the PrescriptionQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.PrescriptionEdges:
+    properties:
+      doctor:
+        $ref: '#/definitions/ent.Doctor'
+        description: Doctor holds the value of the doctor edge.
+        type: object
+      drug:
+        $ref: '#/definitions/ent.Drug'
+        description: Drug holds the value of the drug edge.
+        type: object
+      nurse:
+        $ref: '#/definitions/ent.Nurse'
+        description: Nurse holds the value of the nurse edge.
+        type: object
+      patient:
+        $ref: '#/definitions/ent.Patient'
+        description: Patient holds the value of the patient edge.
+        type: object
+    type: object
+  gin.H:
+    additionalProperties: true
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for SUT SE 2563
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: SUT SA Example API Prescription
+  version: "1.0"
+paths:
+  /doctors:
+    get:
+      description: list doctor entities
+      operationId: list-doctor
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Doctor'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List doctor entities
+    post:
+      consumes:
+      - application/json
+      description: Create doctor
+      operationId: create-doctor
+      parameters:
+      - description: Doctor entity
+        in: body
+        name: doctor
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Doctor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Doctor'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create doctor
+  /doctors/{id}:
+    get:
+      description: get doctor by ID
+      operationId: get-doctor
+      parameters:
+      - description: Doctor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Doctor'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a doctor entity by ID
+  /drugs:
+    get:
+      description: list drug entities
+      operationId: list-drug
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Drug'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List drug entities
+    post:
+      consumes:
+      - application/json
+      description: Create drug
+      operationId: create-drug
+      parameters:
+      - description: Drug entity
+        in: body
+        name: drug
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Drug'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Drug'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create drug
+  /drugs/{id}:
+    get:
+      description: get drug by ID
+      operationId: get-drug
+      parameters:
+      - description: Drug ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Drug'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a drug entity by ID
+  /nurses:
+    get:
+      description: list nurse entities
+      operationId: list-nurse
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Nurse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List nurse entities
+    post:
+      consumes:
+      - application/json
+      description: Create nurse
+      operationId: create-nurse
+      parameters:
+      - description: Nurse entity
+        in: body
+        name: nurse
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Nurse'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Nurse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create nurse
+  /nurses/{id}:
+    get:
+      description: get nurse by ID
+      operationId: get-nurse
+      parameters:
+      - description: Nurse ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Nurse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a nurse entity by ID
+  /patients:
+    get:
+      description: list patient entities
+      operationId: list-patient
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Patient'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List patient entities
+    post:
+      consumes:
+      - application/json
+      description: Create patient
+      operationId: create-patient
+      parameters:
+      - description: Patient entity
+        in: body
+        name: patient
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Patient'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Patient'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create patient
+  /patients/{id}:
+    get:
+      description: get patient by ID
+      operationId: get-patient
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Patient'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a patient entity by ID
+  /prescriptions:
+    get:
+      description: list prescription entities
+      operationId: list-prescription
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Prescription'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List prescription entities
+    post:
+      consumes:
+      - application/json
+      description: Create prescription
+      operationId: create-prescription
+      parameters:
+      - description: Prescription entity
+        in: body
+        name: prescription
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.Prescription'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Prescription'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create prescription
+  /prescriptions/{id}:
+    delete:
+      description: get prescription by ID
+      operationId: delete-prescription
+      parameters:
+      - description: Prescription ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a prescription entity by ID
+    get:
+      description: get prescription by ID
+      operationId: get-prescription
+      parameters:
+      - description: Prescription ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Prescription'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a prescription entity by ID
+    put:
+      consumes:
+      - application/json
+      description: update prescription by ID
+      operationId: update-prescription
+      parameters:
+      - description: Prescription ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Prescription entity
+        in: body
+        name: drugAllergy
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Prescription'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Prescription'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Update a prescription entity by ID
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BasicAuth:
+    type: basic
+  OAuth2AccessCode:
+    authorizationUrl: https://example.com/oauth/authorize
+    flow: accessCode
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+  OAuth2Application:
+    authorizationUrl: ""
+    flow: application
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      write: ' Grants write access'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+  OAuth2Implicit:
+    authorizationUrl: https://example.com/oauth/authorize
+    flow: implicit
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      write: ' Grants write access'
+    type: oauth2
+  OAuth2Password:
+    authorizationUrl: ""
+    flow: password
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      read: ' Grants read access'
+      write: ' Grants write access'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+swagger: "2.0"
